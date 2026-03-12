@@ -78,7 +78,6 @@ class LogisticRegression(nn.Module):
         x = self.flatten(x)
         return self.linear(x)
 
-
 def predict(test_dir):
     """Load the saved model and predict a label for every image in `test_dir`.
 
