@@ -80,6 +80,8 @@ def main():
 
     transform = transforms.Compose([
         transforms.Resize((IMAGE_WIDTH, IMAGE_HEIGHT)),
+        transforms.RandomHorizontalFlip(),                                  #my attempts to reduce overfitting
+        transforms.RandomRotation(10),                                      #my attempts to reduce overfitting
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
@@ -91,11 +93,17 @@ def main():
     val_size = int(len(full_dataset) * VALIDATION_FRACTION)
     train_size = len(full_dataset) - val_size
     train_dataset, val_dataset = random_split(full_dataset, [train_size, val_size])
+    train_dataset.dataset.transform = transform
 
     train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
     val_loader = DataLoader(val_dataset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     model = ResNetClassifier(len(CLASSES))
+
+    for param in model.model.parameters():                                  #my attempts to reduce overfitting
+        param.requires_grad = False                                         #my attempts to reduce overfitting
+
+    model.model.fc = nn.Linear(model.model.fc.in_features, len(CLASSES))    #my attempts to reduce overfitting
 
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
