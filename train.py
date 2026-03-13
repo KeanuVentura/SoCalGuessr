@@ -80,8 +80,6 @@ def main():
 
     transform = transforms.Compose([
         transforms.Resize((IMAGE_WIDTH, IMAGE_HEIGHT)),
-        transforms.RandomHorizontalFlip(),                                  #my attempts to reduce overfitting
-        transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),                #my attempts to reduce overfitting
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
