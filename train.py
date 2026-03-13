@@ -119,9 +119,6 @@ def main():
 
         for images, labels in train_loader:
 
-            images = images
-            labels = labels
-
             outputs = model(images)
             loss = criterion(outputs, labels)
 
@@ -149,9 +146,6 @@ def main():
         with torch.no_grad():
             for images, labels in val_loader:
 
-                images = images
-                labels = labels
-
                 outputs = model(images)
 
                 preds = outputs.argmax(dim=1)
@@ -173,9 +167,6 @@ def main():
             f"Train Acc: {train_acc:.4f}  "
             f"Val Acc: {val_acc:.4f}"
         )
-
-    torch.save(model.state_dict(), "mymodel.pt")
-    print("Saved model to mymodel.pt")
 
     # plot training curves -----------------------------------------------------------------
 
