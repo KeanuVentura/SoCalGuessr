@@ -35,7 +35,7 @@ IMAGE_HEIGHT = 224
 
 BATCH_SIZE = 32
 LEARNING_RATE = 1e-3
-EPOCHS = 5
+EPOCHS = 4
 
 VALIDATION_FRACTION = 0.2
 
@@ -81,7 +81,7 @@ def main():
     transform = transforms.Compose([
         transforms.Resize((IMAGE_WIDTH, IMAGE_HEIGHT)),
         transforms.RandomHorizontalFlip(),                                  #my attempts to reduce overfitting
-        transforms.RandomRotation(10),                                      #my attempts to reduce overfitting
+        transforms.RandomResizedCrop(224, scale=(0.8, 1.0)),                #my attempts to reduce overfitting
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
@@ -100,17 +100,14 @@ def main():
 
     model = ResNetClassifier(len(CLASSES))
 
-    for param in model.model.parameters():                                  #my attempts to reduce overfitting
-        param.requires_grad = False                                         #my attempts to reduce overfitting
-
-    model.model.fc = nn.Linear(model.model.fc.in_features, len(CLASSES))    #my attempts to reduce overfitting
-
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
 
     train_losses = []
     train_accuracies = []
     val_accuracies = []
+
+    best_val_acc = 0
 
     for epoch in range(EPOCHS):
 
@@ -164,6 +161,11 @@ def main():
 
         val_acc = val_correct / val_total
         val_accuracies.append(val_acc)
+
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
+            torch.save(model.state_dict(), "mymodel.pt")
+            print("best model saved")
 
         print(
             f"Epoch {epoch+1}/{EPOCHS}  "
