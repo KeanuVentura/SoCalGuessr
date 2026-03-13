@@ -166,20 +166,5 @@ def main():
             f"Val Acc: {val_acc:.4f}"
         )
 
-    # plot training curves -----------------------------------------------------------------
-
-    plt.figure(figsize=(10,5))
-
-    plt.plot(range(1, EPOCHS+1), train_losses, label="Train Loss")
-    plt.plot(range(1, EPOCHS+1), train_accuracies, label="Train Accuracy")
-    plt.plot(range(1, EPOCHS+1), val_accuracies, label="Validation Accuracy")
-
-    plt.xlabel("Epoch")
-    plt.ylabel("Value")
-    plt.title("Training Curves")
-
-    plt.legend()
-    plt.show()
-
 if __name__ == "__main__":
     main()

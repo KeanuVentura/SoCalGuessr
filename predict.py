@@ -67,8 +67,7 @@ def predict(test_dir):
     return predictions
 
 if __name__ == "__main__":
-    test_folder = "./testdata"
-    preds = predict(test_folder)
+    preds = predict("./testdata")
     print("Predictions:")
     for filename, label in sorted(preds.items()):
         print(f"{filename}: {label}")
